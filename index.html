@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Desk Tape Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@300;400;600&family=Familjen+Grotesk:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main class="desk">
+  <section class="calc" aria-label="Calculator">
+    <div class="brand"><b>Desk Tape</b><span>12-DIGIT</span></div>
+    <div class="screen" role="status" aria-live="polite">
+      <div class="sub" id="sub"><bdi></bdi></div>
+      <div class="main" id="main">0</div>
+    </div>
+    <div class="keys" id="keys">
+      <button class="fn" id="k-ac" data-k="clear">AC</button>
+      <button class="fn" id="k-bs" data-k="back" aria-label="Backspace">⌫</button>
+      <button class="fn" id="k-pct" data-k="%">%</button>
+      <button class="op" id="k-div" data-k="÷">÷</button>
+      <button id="k7" data-k="7">7</button><button id="k8" data-k="8">8</button><button id="k9" data-k="9">9</button>
+      <button class="op" id="k-mul" data-k="×">×</button>
+      <button id="k4" data-k="4">4</button><button id="k5" data-k="5">5</button><button id="k6" data-k="6">6</button>
+      <button class="op" id="k-sub" data-k="−">−</button>
+      <button id="k1" data-k="1">1</button><button id="k2" data-k="2">2</button><button id="k3" data-k="3">3</button>
+      <button class="op" id="k-add" data-k="+">+</button>
+      <button id="k-neg" data-k="neg" aria-label="Change sign">±</button>
+      <button id="k0" data-k="0">0</button>
+      <button id="k-dot" data-k=".">.</button>
+      <button class="eq" id="k-eq" data-k="=">=</button>
+    </div>
+  </section>
+
+  <section class="tape" aria-label="Paper tape">
+    <header><h2>Tape</h2><button class="clear" id="clearTape">Tear off</button></header>
+    <p class="note" id="exNote" hidden>Example entries. Your own sums replace them.</p>
+    <ol class="rolls" id="rolls"></ol>
+    <p class="hint">Tap a line to reuse its total. Keyboard works too: <kbd>0–9</kbd> <kbd>+ − * /</kbd> <kbd>Enter</kbd> <kbd>⌫</kbd> <kbd>Esc</kbd></p>
+  </section>
+</main>
+
+<script src="js/app.js"></script>
+</body>
+</html>

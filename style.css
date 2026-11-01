@@ -1,0 +1,121 @@
+/* Layout: a desk calculator body beside its printed paper tape; stacks on phones. */
+:root {
+  --bg: #dfe3df;
+  --body: #2c2b28;
+  --body-edge: #1d1c1a;
+  --key: #3d3c38;
+  --key-hi: #4a4944;
+  --key-fg: #efede6;
+  --fn: #8d8b83;
+  --fn-fg: #1d1c1a;
+  --accent: #e9a33a;
+  --accent-fg: #241a08;
+  --screen: #1a1f1c;
+  --screen-fg: #d9e8dc;
+  --screen-dim: #7f9285;
+  --tape: #fbfbf7;
+  --ink: #262520;
+  --muted: #6f6e67;
+  --rule: #d6d5cd;
+  --display: "Chivo Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --ui: "Familjen Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131513; --body: #2a2926; --body-edge: #0c0c0b; --key: #393834; --key-hi: #45443f;
+    --key-fg: #efede6; --fn: #77756e; --fn-fg: #141412; --accent: #e9a33a; --accent-fg: #241a08;
+    --screen: #0f1311; --screen-fg: #d9e8dc; --screen-dim: #6d8073;
+    --tape: #1d1e1b; --ink: #e5e3dc; --muted: #95938c; --rule: #33342f; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131513; --body: #2a2926; --body-edge: #0c0c0b; --key: #393834; --key-hi: #45443f;
+  --key-fg: #efede6; --fn: #77756e; --fn-fg: #141412; --accent: #e9a33a; --accent-fg: #241a08;
+  --screen: #0f1311; --screen-fg: #d9e8dc; --screen-dim: #6d8073;
+  --tape: #1d1e1b; --ink: #e5e3dc; --muted: #95938c; --rule: #33342f; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg); color: var(--ink); font-family: var(--ui);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px;
+}
+.desk {
+  max-width: 760px; margin: 0 auto;
+  display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 28px; align-items: start;
+}
+@media (max-width: 700px) { .desk { grid-template-columns: minmax(0, 1fr); max-width: 380px; } }
+
+/* Calculator body */
+.calc {
+  background: var(--body); border-radius: 22px; padding: 20px;
+  box-shadow: 0 2px 0 var(--body-edge), 0 18px 40px -18px rgba(0,0,0,.45);
+  display: grid; gap: 18px;
+}
+.brand { display: flex; justify-content: space-between; align-items: baseline; color: var(--fn); }
+.brand b { font-weight: 600; letter-spacing: .14em; text-transform: uppercase; font-size: 11px; color: var(--key-fg); }
+.brand span { font-family: var(--display); font-size: 11px; letter-spacing: .06em; }
+
+.screen {
+  background: var(--screen); border-radius: 10px; padding: 14px 16px 12px;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.6);
+  min-height: 108px; display: grid; align-content: end; gap: 4px; text-align: right;
+  font-family: var(--display); font-variant-numeric: tabular-nums; overflow: hidden;
+}
+.screen .sub { color: var(--screen-dim); font-size: 14px; min-height: 1.3em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; direction: rtl; }
+.screen .sub bdi { direction: ltr; }
+.screen .main { color: var(--screen-fg); font-size: 40px; font-weight: 300; line-height: 1.1; word-break: break-all; }
+.screen .main.m { font-size: 30px; }
+.screen .main.s { font-size: 22px; }
+.screen .main.err { color: var(--accent); }
+
+.keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.keys button {
+  font: 400 22px/1 var(--display); color: var(--key-fg); background: var(--key);
+  border: 0; border-radius: 12px; aspect-ratio: 1 / .86; cursor: pointer;
+  box-shadow: 0 3px 0 var(--body-edge); transition: transform .06s, box-shadow .06s, background .12s;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.keys button:hover { background: var(--key-hi); }
+.keys button:active, .keys button.press { transform: translateY(3px); box-shadow: 0 0 0 var(--body-edge); }
+.keys button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.keys .fn { background: var(--fn); color: var(--fn-fg); font-family: var(--ui); font-weight: 600; font-size: 17px; }
+.keys .fn:hover { background: var(--fn); filter: brightness(1.08); }
+.keys .op { color: var(--accent); font-size: 26px; }
+.keys .op.on { background: var(--key-hi); box-shadow: inset 0 0 0 1.5px var(--accent), 0 3px 0 var(--body-edge); }
+.keys .eq { background: var(--accent); color: var(--accent-fg); font-size: 28px; font-weight: 600; }
+.keys .eq:hover { background: var(--accent); filter: brightness(1.06); }
+.keys .zero { grid-column: span 2; aspect-ratio: auto; }
+
+/* Paper tape */
+.tape {
+  background: var(--tape); border-radius: 4px 4px 0 0; min-width: 0;
+  box-shadow: 0 1px 0 var(--rule), 0 12px 30px -20px rgba(0,0,0,.35);
+  position: relative; padding: 18px 20px 26px;
+  -webkit-mask: radial-gradient(circle 6px at 50% 100%, transparent 5.5px, #000 6px) 0 0 / 14px 100% repeat-x;
+          mask: radial-gradient(circle 6px at 50% 100%, transparent 5.5px, #000 6px) 0 0 / 14px 100% repeat-x;
+}
+.tape header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; border-bottom: 1px dashed var(--rule); padding-bottom: 10px; }
+.tape h2 { margin: 0; font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+.tape .clear { font: 500 13px var(--ui); color: var(--muted); background: none; border: 0; cursor: pointer; padding: 4px 0; }
+.tape .clear:hover { color: var(--ink); text-decoration: underline; }
+.tape .clear:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.note { font-size: 12px; color: var(--muted); margin: 8px 0 0; }
+.rolls { list-style: none; margin: 0; padding: 0; font-family: var(--display); font-variant-numeric: tabular-nums; }
+.rolls li { border-bottom: 1px dashed var(--rule); }
+.rolls button {
+  width: 100%; background: none; border: 0; color: inherit; font: inherit; text-align: right;
+  padding: 12px 0; cursor: pointer; display: grid; gap: 2px;
+}
+.rolls button:hover .r { color: var(--accent); }
+.rolls button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.rolls .x { color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
+.rolls .r { font-size: 19px; font-weight: 600; overflow-wrap: anywhere; }
+.rolls .r::before { content: "= "; color: var(--muted); font-weight: 400; }
+.empty { color: var(--muted); font-size: 14px; padding: 16px 0 4px; }
+.hint { font-size: 12px; color: var(--muted); margin-top: 14px; line-height: 1.5; }
+kbd { font-family: var(--display); font-size: 11px; border: 1px solid var(--rule); border-radius: 4px; padding: 1px 4px; }
+@media (prefers-reduced-motion: reduce) { .keys button { transition: none; } }
